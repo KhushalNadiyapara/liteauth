@@ -8,8 +8,14 @@ const UserSchema = new mongoose.Schema(
       required: [true, 'Username is required'],
       unique: true,
       trim: true,
-      minlength: [3, 'Username must be at least 3 characters long'],
-      maxlength: [20, 'Username cannot exceed 20 characters']
+     minlength:[3,"username must be 3 characters"],
+     maxlength:[25, "username not exceed 25 characters"],
+    validate: {
+        validator: function(v) {
+          return /^[A-Z]/.test(v);
+        },
+        message: "Password's first character must be uppercase"
+      }
     },
     email: {
       type: String,
@@ -24,7 +30,8 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters long']
+     minlength:[8,"password must be 8 characters"],
+     maxlength:[16 , "password not exceed 16 characters"]
     },
     role: {
       type: String,

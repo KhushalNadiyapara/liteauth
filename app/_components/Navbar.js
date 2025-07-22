@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 export default function Navbar({ user, onLogout, onProfileClick }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <nav className="bg-gray-200 shadow-sm border-b m-1.5 rounded-3xl">
@@ -22,8 +23,25 @@ export default function Navbar({ user, onLogout, onProfileClick }) {
             </Link>
           </div>
 
-          {/* Navigation Links */}
-          <div className="flex items-center space-x-4">
+          {/* Hamburger for mobile */}
+          <div className="flex items-center lg:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Navigation Links (desktop) */}
+          <div className="hidden lg:flex items-center space-x-4">
             <Link 
               href="/dashboard" 
               className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
@@ -96,6 +114,53 @@ export default function Navbar({ user, onLogout, onProfileClick }) {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden px-4 pb-4">
+          <Link 
+            href="/dashboard" 
+            className="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Dashboard
+          </Link>
+          {(user?.role === 'ADMIN' || user?.role === 'admin') && (
+            <Link 
+              href="/admin" 
+              className="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Admin
+            </Link>
+          )}
+          <button
+            onClick={() => {
+              onProfileClick()
+              setIsMobileMenuOpen(false)
+            }}
+            className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          >
+            View Profile
+          </button>
+          <Link
+            href="/settings"
+            className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Settings
+          </Link>
+          <button
+            onClick={() => {
+              onLogout()
+              setIsMobileMenuOpen(false)
+            }}
+            className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+          >
+            Sign out
+          </button>
+        </div>
+      )}
 
       {/* Click outside to close dropdown */}
       {isProfileOpen && (

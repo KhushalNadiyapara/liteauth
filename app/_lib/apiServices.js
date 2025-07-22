@@ -35,7 +35,7 @@ export const authAPI = {
       };
     }
   },
-  
+
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);

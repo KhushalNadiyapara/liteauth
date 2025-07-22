@@ -15,9 +15,9 @@ export async function POST(request) {
       );
     }
 
-    // Check if email exists
+    // Check if email exists (case-insensitive)
     const existingUser = await User.findOne({ 
-      email: email.toLowerCase() 
+      email: email.toLowerCase()
     });
 
     return NextResponse.json({

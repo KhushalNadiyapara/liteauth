@@ -18,6 +18,9 @@ export default function UsersList({ users, onRoleUpdate, loading, error }) {
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
+      second: 'numeric',
+      minute: '2-digit',
+      hour: '2-digit',
       year: 'numeric',
       month: 'short',
       day: 'numeric'

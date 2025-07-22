@@ -15,7 +15,7 @@ export async function POST(request) {
       );
     }
 
-    // Check if username exists
+    // Check if username exists (case-insensitive)
     const existingUser = await User.findOne({ 
       username: { $regex: new RegExp(`^${username}$`, 'i') } 
     });

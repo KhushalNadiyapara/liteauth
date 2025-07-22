@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useState, useCallback } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useAPI } from '../_lib/useAPI';
 
 // Simple debounce helper
 function debounce(fn, delay) {
@@ -17,6 +19,8 @@ function debounce(fn, delay) {
 }
 
 export default function LoginForm() {
+
+   const { loading: apiLoading, error: apiError, callAPI, clearError } = useAPI()
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,24 +29,19 @@ export default function LoginForm() {
   const [emailStatus, setEmailStatus] = useState({ checking: false, exists: null });
   const router = useRouter();
 
-  // Checks with the backend if email exists
-  async function checkEmailExists(email) {
-    try {
-      const res = await fetch('/api/auth/check-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      return !data.available;
-    } catch (e) {
-      console.error('Email check failed:', e);
-      // fallback, treat unknown as “not exists”
-      return false;
-    }
+ async function checkEmailExists(email) {
+  try {
+    // Use the API service instead of direct axios call
+    const result = await callAPI(authAPI.checkEmail, email);
+    return !result?.available; // If not available, it means email exists
+  } catch (error) {
+    console.error('Email check failed:', error);
+    // For fallback, you can simulate some existing emails
+    return ['test@test.com', 'admin@admin.com', 'user@example.com']
+      .includes(email.toLowerCase());
   }
-
-  // Debounced email existence validator
+}
+  
   const debouncedEmailCheck = useCallback(
     (email) => {
       const fn = debounce(async (em) => {
