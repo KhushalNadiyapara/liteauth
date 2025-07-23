@@ -176,7 +176,7 @@ export default function LoginForm() {
               </div>
             </Link>
             <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-            <p className="text-gray-600">Sign in to your LiteAuth account</p>
+            <p className="text-gray-600">Sign in to your LiteAuth Account</p>
           </div>
 
           {/* Form */}
@@ -199,7 +199,7 @@ export default function LoginForm() {
                       validationErrors.email
                         ? 'border-red-500'
                         : emailStatus.exists === true
-                        ? 'border-green-500'
+                        ? 'border-green-600'
                         : emailStatus.exists === false
                         ? 'border-red-500'
                         : 'border-gray-300'
