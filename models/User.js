@@ -10,12 +10,6 @@ const UserSchema = new mongoose.Schema(
       trim: true,
      minlength:[3,"username must be 3 characters"],
      maxlength:[25, "username not exceed 25 characters"],
-    validate: {
-        validator: function(v) {
-          return /^[A-Z]/.test(v);
-        },
-        message: "Password's first character must be uppercase"
-      }
     },
     email: {
       type: String,
